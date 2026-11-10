@@ -1,0 +1,13 @@
+target/
+data/
+config/
+.idea/
+.vscode/
+*.iml
+.claude/
+REFACTOR_PLAN.md
+contexto.md
+Contexto.md
+Design.md
+*.log
+.env

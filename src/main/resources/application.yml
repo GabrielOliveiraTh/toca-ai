@@ -1,0 +1,24 @@
+server:
+  address: ${MIXTAPE_BIND:0.0.0.0}
+  port: 8080
+spring:
+  web:
+    resources:
+      cache:
+        cachecontrol:
+          no-cache: true
+  datasource:
+    url: jdbc:h2:file:./data/mixtape
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+youtube:
+  api-key: ${YOUTUBE_API_KEY:}
+spotify:
+  client-id: ${SPOTIFY_CLIENT_ID:}
+  redirect-uri: http://127.0.0.1:8080/auth/spotify/callback
+share:
+  host: ${MIXTAPE_SHARE_HOST:}

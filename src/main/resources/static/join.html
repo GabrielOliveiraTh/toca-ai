@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0a0a0a">
+<title>Toca Aí · help with the playlist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="icon" href="/icons/icon-192.png">
+<link rel="stylesheet" href="/style.css">
+<link rel="stylesheet" href="/join.css">
+</head>
+<body class="join">
+<main id="app">
+
+  <section id="screenLoading" class="card center-card" aria-live="polite">
+    <p class="muted">Loading the playlist…</p>
+  </section>
+
+  <section id="screenDead" class="card center-card" hidden>
+    <h1>Link inactive</h1>
+    <p class="muted" id="deadMsg">This link is no longer active. Ask the owner for a new one.</p>
+    <button id="deadRetry" class="outline" hidden>Try again</button>
+  </section>
+
+  <section id="screenName" class="card center-card" hidden>
+    <p class="caption">Toca Aí</p>
+    <h1 id="nameTitle">Help build the playlist</h1>
+    <p class="muted" id="nameHint">Enter your name so everyone knows who added each track.</p>
+    <form id="nameForm" autocomplete="off">
+      <label for="nameInput" class="label">Your name</label>
+      <input id="nameInput" maxlength="40" required placeholder="E.g. Ana">
+      <button class="primary" id="nameBtn">Join</button>
+      <button type="button" class="ghost" id="nameCancel" hidden>Cancel</button>
+    </form>
+  </section>
+
+  <section id="screenMain" hidden>
+    <header class="join-head">
+      <p class="caption">Helping build</p>
+      <h1 id="plName"></h1>
+      <p class="muted small" id="plStyle"></p>
+      <p class="small me">
+        You: <b id="meName"></b>
+        <span class="dot-sep">·</span>
+        <button type="button" class="linkish" id="renameBtn">fix name</button>
+        <span class="dot-sep">·</span>
+        <button type="button" class="linkish" id="notMeBtn">not me</button>
+      </p>
+    </header>
+
+    <div class="tabs" role="tablist" aria-label="Sections">
+      <button role="tab" id="tab-list" data-tab="list" aria-controls="panel-list" aria-selected="true" class="active">Playlist <span id="countBadge" class="badge">0</span></button>
+      <button role="tab" id="tab-search" data-tab="search" aria-controls="panel-search" aria-selected="false">Search</button>
+      <button role="tab" id="tab-sugg" data-tab="sugg" aria-controls="panel-sugg" aria-selected="false">Suggestions</button>
+    </div>
+
+    <section id="panel-list" role="tabpanel" aria-labelledby="tab-list">
+      <div id="chips" class="chips-row" role="group" aria-label="Filter by who added" hidden></div>
+      <ul id="list" class="tracks" data-empty="No tracks yet. Use the Search and Suggestions tabs to add the first one"></ul>
+    </section>
+
+    <section id="panel-search" role="tabpanel" aria-labelledby="tab-search" hidden>
+      <form id="searchForm" class="tools" role="search">
+        <input id="q" type="search" placeholder="Track or artist…" aria-label="Search tracks" maxlength="100">
+        <button id="searchBtn">Search</button>
+      </form>
+      <ul id="results" class="tracks" data-empty="Search for a track or artist and tap + to add it to the playlist."></ul>
+    </section>
+
+    <section id="panel-sugg" role="tabpanel" aria-labelledby="tab-sugg" hidden>
+      <div class="tools sub">
+        <span class="muted small">Ideas based on the style and what is already in the playlist.</span>
+        <span class="spacer"></span>
+        <button id="suggReload" class="outline">New suggestions</button>
+      </div>
+      <ul id="sugg" class="tracks" data-empty="No suggestions for now. Try &quot;New suggestions&quot;."></ul>
+    </section>
+  </section>
+
+</main>
+<div id="toast" hidden role="status"></div>
+<script type="module" src="/guest/main.js"></script>
+</body>
+</html>

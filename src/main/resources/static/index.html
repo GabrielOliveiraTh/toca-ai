@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Toca Aí</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/x-icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16.png">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Toca Aí">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<aside id="sidebar" aria-label="Playlists">
+  <div class="side-head">
+    <span class="logo"><svg class="brand-glyph" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 336 304.84" fill="currentColor" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M72 0L264 0C303.76 0 336 32.24 336 72L336 168C336 207.76 303.76 240 264 240L132 240C116 268 72 294 20 304C6 307 0 302 0 288L0 72C0 32.24 32.24 0 72 0ZM147.42 68Q133.56 60 133.56 76L133.56 164Q133.56 180 147.42 172L220.17 130Q237.49 120 220.17 110Z"/></svg><span class="brand-name">Toca Aí</span></span>
+    <button id="collapseBtn" class="icon" aria-label="Collapse menu" title="Collapse menu"></button>
+  </div>
+  <button id="newBtn" class="primary" title="New playlist"><span id="newIcon"></span><span class="label">New playlist</span></button>
+  <ul id="playlistList"></ul>
+  <button id="installBtn" class="ghost full" hidden title="Install Toca Aí as an app">Install app</button>
+  <div id="spotifyBox"></div>
+</aside>
+
+<main id="main">
+  <section id="wizard" class="wizard-wrap" hidden>
+    <form id="wForm" class="card wizard" autocomplete="off">
+      <div class="wizard-brand"><svg class="brand-glyph" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 336 304.84" fill="currentColor" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M72 0L264 0C303.76 0 336 32.24 336 72L336 168C336 207.76 303.76 240 264 240L132 240C116 268 72 294 20 304C6 307 0 302 0 288L0 72C0 32.24 32.24 0 72 0ZM147.42 68Q133.56 60 133.56 76L133.56 164Q133.56 180 147.42 172L220.17 130Q237.49 120 220.17 110Z"/></svg><span class="brand-name">Toca Aí</span></div>
+      <p id="wWelcome" class="caption">Welcome to Toca Aí</p>
+      <ol class="steps" aria-label="Steps">
+        <li data-step="1"><span class="n">1</span> Spotify</li>
+        <li data-step="2"><span class="n">2</span> Names</li>
+        <li data-step="3"><span class="n">3</span> Style</li>
+        <li data-step="4"><span class="n">4</span> Reference</li>
+        <li data-step="5"><span class="n">5</span> Comparison</li>
+      </ol>
+
+      <div class="wstep" data-step="1">
+        <h2>Connect your Spotify account</h2>
+        <p class="muted">Needed to import reference and comparison playlists and to export the finished playlist. Without connecting, you can still build the playlist and play previews.</p>
+        <div id="wSpotify" class="notice"></div>
+      </div>
+
+      <div class="wstep" data-step="2" hidden>
+        <h2>Who are you, and what will the playlist be called?</h2>
+        <p class="muted">Your name appears as the author of the tracks you add, next to the names of the people who help. You can change both later.</p>
+        <label class="field"><span class="caption">Your name</span>
+          <input id="wOwner" name="mx-owner" autocomplete="off" maxlength="40" placeholder="What your friends call you"></label>
+        <label class="field"><span class="caption">Playlist name</span>
+          <input id="wName" name="mx-name" autocomplete="off" maxlength="100" placeholder="E.g. Heavy workout, Friday night…"></label>
+      </div>
+
+      <div class="wstep" data-step="3" hidden>
+        <h2>What is the style of the playlist?</h2>
+        <p class="muted">Describe it in your own words: genre, era, mood, occasion. Suggestions will follow this style. Optional.</p>
+        <input id="wStyle" name="mx-style" autocomplete="off" maxlength="200" placeholder="Type the style you have in mind…">
+        <p id="wStyleHint" class="muted small"></p>
+      </div>
+
+      <div class="wstep" data-step="4" hidden>
+        <h2>Start from a reference playlist?</h2>
+        <p class="muted">Paste the link to a Spotify playlist (yours or collaborative), a Deezer playlist (any public one) or a YouTube playlist. It is the basis for suggestions and for the diff. Optional.</p>
+        <div class="notice" data-needs-spotify hidden>Spotify links require signing in; Deezer and YouTube links work without connecting. <button type="button" class="outline" data-goto="1">Connect</button></div>
+        <input id="wRef" name="mx-ref" autocomplete="off" placeholder="Spotify, Deezer or YouTube link">
+      </div>
+
+      <div class="wstep" data-step="5" hidden>
+        <h2>Compare with other playlists?</h2>
+        <p class="muted">Add as many as you like. Tracks that appear in several of them show what they have in common. Spotify only allows your own or collaborative playlists; for other people's, use a Deezer or YouTube link. Optional.</p>
+        <div class="notice" data-needs-spotify hidden>Spotify links require signing in; Deezer and YouTube links work without connecting. <button type="button" class="outline" data-goto="1">Connect</button></div>
+        <div class="row">
+          <input id="wSrc" name="mx-src" autocomplete="off" placeholder="Spotify, Deezer or YouTube link">
+          <button type="button" id="wSrcAdd" class="outline">Add</button>
+        </div>
+        <ul id="wSrcList" class="chips" data-empty="No comparison playlists added."></ul>
+        <div id="wSummary" class="summary" aria-live="polite"></div>
+      </div>
+
+      <div class="wizard-actions">
+        <button type="button" id="wCancel" class="ghost">Cancel</button>
+        <span class="spacer"></span>
+        <button type="button" id="wBack" class="outline">Back</button>
+        <button type="button" id="wSkip" class="ghost">Skip</button>
+        <button type="submit" id="wNext" class="primary">Continue</button>
+      </div>
+    </form>
+  </section>
+
+  <div id="workspace" hidden>
+    <header class="top">
+      <input id="title" class="title" spellcheck="false" aria-label="Playlist name">
+      <button id="shareBtn" class="outline" title="Invite people by QR code to help build the playlist"><span data-icon="share"></span> Share</button>
+      <button id="diffBtn" class="outline" title="Compare your playlist with the reference">Diff</button>
+      <button id="exportBtn" class="primary">Export to Spotify</button>
+      <button id="deleteBtn" class="outline danger" title="Delete this playlist">Delete</button>
+    </header>
+    <div id="exportMsg" class="msg" hidden></div>
+
+    <div class="grid">
+      <section class="card pane" aria-labelledby="mineTitle">
+        <div class="pane-head">
+          <h2 id="mineTitle">My playlist <span id="count" class="badge solid">0</span></h2>
+          <span class="spacer"></span>
+          <button id="undoBtn" class="ghost" title="Undo the last change (Ctrl+Z)" disabled><span data-icon="undo"></span> Undo</button>
+          <div class="menu-wrap">
+            <button id="sortBtn" class="ghost" aria-haspopup="true" aria-expanded="false" title="Sort by the mood of the tracks"><span data-icon="sort"></span> Sort</button>
+            <div id="sortMenu" class="menu" role="menu" hidden>
+              <p class="caption">Sort by mood (tempo)</p>
+              <button role="menuitem" data-sort="asc">Calm to upbeat</button>
+              <button role="menuitem" data-sort="desc">Upbeat to calm</button>
+              <button role="menuitem" data-sort="wave">Build up, then wind down</button>
+            </div>
+          </div>
+          <button id="listenMine" class="ghost" title="Play the previews in sequence"><span data-icon="play"></span> Play</button>
+        </div>
+        <div id="byFilter" class="by-filter" role="group" aria-label="Filter by who added" hidden></div>
+        <ul id="tracks" class="tracks scroll" data-empty="Empty for now. Add tracks from the Search and Suggestions tabs, then drag to reorder."></ul>
+      </section>
+
+      <section class="card pane" aria-label="Discover tracks">
+        <div class="tabs" role="tablist">
+          <button role="tab" data-tab="suggestions">Suggestions</button>
+          <button role="tab" data-tab="search">Search</button>
+          <button role="tab" data-tab="common">In common <span id="commonN" class="badge" hidden></span></button>
+          <button role="tab" data-tab="reference">Reference <span id="refN" class="badge" hidden></span></button>
+          <button role="tab" data-tab="compare">Comparison <span id="cmpN" class="badge" hidden></span></button>
+        </div>
+
+        <div class="tabpanel" data-panel="suggestions">
+          <form id="styleForm" class="tools">
+            <input id="styleInput" name="mx-style-ws" autocomplete="off" maxlength="200" aria-label="Playlist style"
+                   placeholder="Describe the style of the playlist">
+            <button>Apply style</button>
+          </form>
+          <div class="tools filters" role="group" aria-label="Suggestion filters">
+            <button type="button" class="toggle" data-filter="avoidLive" aria-pressed="false" title="Hides live and acoustic versions">No live versions</button>
+            <button type="button" class="toggle" data-filter="avoidRemix" aria-pressed="false" title="Hides remixes, radio edits, karaoke, covers and other versions">No remixes or alternate versions</button>
+            <button type="button" class="toggle" data-filter="popular" aria-pressed="false" title="Only tracks with good popularity on Deezer">Popular only</button>
+            <details class="genre-menu" id="genreMenu">
+              <summary class="toggle" id="genreSummary" title="Hides suggestions from these genres">Exclude genres</summary>
+              <div class="genre-pop" id="genrePop" role="group" aria-label="Genres to exclude"></div>
+            </details>
+            <span class="spacer"></span>
+            <button type="button" id="hiddenBtn" class="ghost" title="Tracks you marked as not for you">Hidden (<span id="hiddenN">0</span>)</button>
+          </div>
+          <div class="tools sub"><span id="sugHint" class="muted small"></span><span class="spacer"></span>
+            <button id="listenSug" class="ghost" title="Play the suggestions in sequence"><span data-icon="play"></span> Play all</button>
+            <button id="refreshSug" class="outline">New suggestions</button></div>
+          <ul id="suggestions" class="tracks scroll"></ul>
+        </div>
+
+        <div class="tabpanel" data-panel="search" hidden>
+          <form id="searchForm" class="tools">
+            <input id="q" placeholder="Track or artist…  ( / )" aria-label="Search tracks">
+            <button>Search</button>
+          </form>
+          <ul id="results" class="tracks scroll" data-empty="Search for a track or artist."></ul>
+        </div>
+
+        <div class="tabpanel" data-panel="common" hidden>
+          <div class="tools"><span class="muted">Tracks that appear in 2 or more reference or comparison playlists.</span></div>
+          <ul id="common" class="tracks scroll"></ul>
+        </div>
+
+        <div class="tabpanel" data-panel="reference" hidden>
+          <form id="refForm" class="tools">
+            <input id="refUrl" placeholder="Spotify, Deezer or YouTube link" aria-label="Reference playlist">
+            <button>Load</button>
+            <button type="button" id="refClear" class="ghost danger">Remove</button>
+          </form>
+          <div class="tools sub"><span id="refName" class="muted"></span><span class="spacer"></span>
+            <button id="addAllRef" class="ghost" hidden>Add all</button></div>
+          <ul id="reference" class="tracks scroll" data-empty="No reference playlist. Paste a link above (optional)."></ul>
+        </div>
+
+        <div class="tabpanel" data-panel="compare" hidden>
+          <form id="srcForm" class="tools">
+            <input id="srcUrl" placeholder="Spotify, Deezer or YouTube link" aria-label="Comparison playlist">
+            <button>Add</button>
+          </form>
+          <ul id="sourcesList" class="chips scroll" data-empty="None yet. With 2 or more playlists (counting the reference), the In common tab shows what they share."></ul>
+        </div>
+      </section>
+    </div>
+  </div>
+</main>
+
+<dialog id="diffDialog" class="modal" aria-labelledby="diffTitle">
+  <header class="modal-head">
+    <h2 id="diffTitle">Diff</h2>
+    <select id="diffAgainst" aria-label="Compare with"></select>
+    <span class="spacer"></span>
+    <button id="diffClose" class="outline">Close</button>
+  </header>
+  <div class="diff-cols">
+    <div><h3>In both <span id="diffBothN" class="badge solid"></span></h3><ul id="diffBoth" class="tracks scroll" data-empty="None."></ul></div>
+    <div><h3>Only in mine <span id="diffMineN" class="badge"></span></h3><ul id="diffMine" class="tracks scroll" data-empty="None."></ul></div>
+    <div><h3>Only in the reference <span id="diffSrcN" class="badge outline"></span></h3><ul id="diffSrc" class="tracks scroll" data-empty="None. You have everything"></ul></div>
+  </div>
+</dialog>
+
+<dialog id="shareDialog" class="modal narrow" aria-labelledby="shareTitle">
+  <header class="modal-head">
+    <h2 id="shareTitle">Share playlist</h2>
+    <span class="spacer"></span>
+    <button id="shareClose" class="outline">Close</button>
+  </header>
+
+  <div id="shareIntro">
+    <p class="muted">Generate a link and a QR code so friends can add tracks from their phones. They only enter a name, and you see who added each track and when.</p>
+    <p class="muted small">Works for anyone on the same Wi-Fi network as this computer. Whoever opens the link only sees this playlist: they cannot reach the rest of the app, your Spotify or other playlists. You can stop sharing at any time.</p>
+    <button id="shareEnable" class="primary">Generate link and QR code</button>
+  </div>
+
+  <div id="shareActive" hidden>
+    <div class="qr-box"><img id="shareQr" alt="Invitation QR code" width="220" height="220"></div>
+    <p class="muted small center">Ask them to point their phone camera at the QR code.</p>
+    <div class="row"><input id="shareUrl" readonly aria-label="Invitation link"><button id="shareCopy" class="outline">Copy</button></div>
+    <label class="field"><span class="caption">This computer's address on the network</span>
+      <select id="shareAddr" aria-label="Address"></select></label>
+    <input id="shareCustom" placeholder="https://your-public-address (for example a tunnel)" aria-label="Other address" hidden>
+    <p id="shareHint" class="muted small"></p>
+    <label class="field"><span class="caption">Your name (shown on the tracks you add)</span>
+      <span class="row tight"><input id="ownerInput" maxlength="40"><button id="ownerSave" class="outline">Save</button></span></label>
+    <div id="shareContrib" class="contrib"></div>
+    <button id="shareDisable" class="outline danger">Stop sharing</button>
+  </div>
+</dialog>
+
+<dialog id="hiddenDialog" class="modal narrow" aria-labelledby="hiddenTitle">
+  <header class="modal-head">
+    <h2 id="hiddenTitle">Hidden tracks</h2>
+    <span class="spacer"></span>
+    <button id="hiddenClose" class="outline">Close</button>
+  </header>
+  <p class="muted small">They will not come back in this playlist's suggestions. If you hide 2 tracks by the same artist, the whole artist is removed from suggestions.</p>
+  <ul id="hiddenList" class="tracks scroll" data-empty="No hidden tracks."></ul>
+</dialog>
+
+<div id="player" class="player" hidden role="region" aria-label="Preview player">
+  <div id="plCover" class="pl-cover"></div>
+  <div class="pl-info"><b id="plTitle"></b><span id="plArtist"></span></div>
+  <div class="pl-controls">
+    <button id="plPrev" class="icon" aria-label="Previous" title="Previous (←)"></button>
+    <button id="plPlay" class="icon big" aria-label="Play" title="Play / pause (Space)"></button>
+    <button id="plNext" class="icon" aria-label="Next" title="Next (→)"></button>
+  </div>
+  <input id="plSeek" type="range" min="0" max="1000" value="0" aria-label="Preview position">
+  <span id="plTime" class="small muted">0:00</span>
+  <button id="plAuto" class="toggle" aria-pressed="true" title="Move to the next track automatically">Auto</button>
+  <button id="plClose" class="icon" aria-label="Close the player" title="Close"></button>
+</div>
+
+<div id="toast" hidden role="status"></div>
+<script type="module" src="/js/main.js"></script>
+</body>
+</html>
